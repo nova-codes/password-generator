@@ -49,134 +49,119 @@ var passwordOptions = [
 	},
 ];
 
-// Added isNumber error message
-var optionErrors = {
-	selectOne: "You must select at least one character set!",
-	validLength: "Number must be between 8 and 128!",
-	isNumber: "Invalid character. Please enter a number."
-}
-
-
+// Class to get User Input
 function assignment() {
 
-	// Annoy the user until they break and give us the information we need
-	passwordOptions.forEach(function(item){
-		// This is a passwordOption input
-		if (isCharSetOption(item) === true) {
-			var i = 0;
+	var isValid = {
+		validLength: false,
+		selectOne: false, 
+	}
 
-			// good effort but probably not what you want to do
-			if(isValid.lengthInput < item.min || isValid.lengthInput > item.max) {
-				item.value = alert(item.prompt); 
+	// Added isNumber error message
+	var optionErrors = {
+		selectOne: "You must select at least one character set!",
+		validLength: "Number must be between 8 and 128!",
+		isNumber: "Invalid character. Please enter a number."
+	}
+
+	function confirmChoice(item) {
+		var i = 0;
+	
+		// good effort but probably not what you want to do
+		// if(isValid.lengthInput < item.min || isValid.lengthInput > item.max) {}
+
+		
+		if(isValid.selectOne === false || i < passwordOptions.length) {
+			item.selected = confirm(item.prompt);
+		
+			// This is validating that user selected one of the options
+			if (item.selected === true) {
+				isValid.selectOne = true;
+			}
+		i++;
+		}
+	}
+
+	function userLength(item) {
+		while(isValid.validLength === false) {
+			var promptVal = prompt(item.prompt);
+
+			if(promptVal === null) {
+				break;
 			}
 
-			
-			if(isValid.selectOne === false || i < passwordOptions.length) {
-				item.selected = confirm(item.prompt);
-			
-				// This is validating that user selected one of the options
-				if (item.selected === true) {
-					isValid.selectOne = true;
-				}
-			i++;
+			item.userInput = parseInt(promptVal); 
+
+			//if user input is not a number, tell them to input a number.
+			if (isNaN(+item.userInput)){
+				item.prompt = optionErrors.lengthInput;
 			}
-		} 
-		else {
-			// Ask until the user either complies or leaves the page to go somewhere else
-			while(isValid.validLength === false) {
-				var promptVal = prompt(item.prompt);
-
-				if(promptVal == null) {
-					break;
-				}
-
-				item.userInput = parseInt(prompt(item.prompt)); 
-
-				//if user input is not a number, tell them to input a number.
-				if(isNaN(item.userInput)) {
-					
-					// left it here just for reasons
-					alert("Please enter a number.");
-					item.prompt = optionErrors.isNumber;
-				}
-
-				// if user input IS a number, is that number within the min/max?
-				else if(item.userInput >= item.min && item.userInput <= item.max){
-					alert("Valid number.");
-				}
-
-				// If user input is too short, tell them
-				else if(item.userInput <= item.min - 1){
-					alert("Insufficient Length: Number is too small."); 
-				}
-
-				// If user input is too big, that's what she said
-				else if(item.userInput >= item.min + 1){
-					alert("Insufficent Length: Number is too large.")
-				}
-			
-
-				// if (isNaN(+item.userInput)){
-				// 	item.prompt = optionErrors.validLength;
-				// }
-				// else if (item.validator(item.userInput, item.min, item.max)) {
-				// 	item.value = item.userInput;
-				// 	isValid.validLength = true;
-				// }
-				// else {
-				// 	item.prompt = optionErrors.validLength;
-				// }
+			else if (item.validator(item.userInput, item.min, item.max)) {
+				item.value = item.userInput;
+				isValid.validLength = true;
+			}
+			else {
+				item.prompt = optionErrors.validLength;
 			}
 		}
-	});
+	}
+
+	return {
+		// this sucks 🙃
+		assignLoop: function() {
+			for (var item of passwordOptions) {
+				if (isCharSetOption(item) === true) {
+					confirmChoice(item);
+				} 
+				else {
+					// Ask until the user either complies or leaves the page to go somewhere else
+					userLength(item);
+				}
+		
+			}
+		}
+	
+
+	};
+}
 
 console.log(passwordOptions);
-}
 
-var isValid = {
-	validLength: false,
-	selectOne: false, 
-	lengthInput: {
-		min: 8,
-		max: 128
+
+
+	/**
+	 * HIGGINS! FETCH MY PASSWORD GENERATOR
+	 */
+	var myAss = new assignment();
+
+	// var ass = assignment().assignLoop();
+
+	generateBtn.addEventListener("click", myAss.assignLoop);
+
+	var options = {
+		leng: 0,
+		hasUpper: false,
+		hasLower: false,
+		hasSymbol: false,
+		hasNumber: false
+	} 
+
+	function optionsMapper() {
+		passwordOptions.forEach(function(item){
+			if(isCharSetOption(item) === true) {
+				options[item.passwordGeneratorField] = item.selected;
+			}
+			else {
+				options[item.passwordGeneratorField] = item.value;
+			}
+		});
 	}
-}
 
+	optionsMapper();
 
-var ass = assignment;
+	console.log(options);
+	console.log(password); 
 
-generateBtn.addEventListener("click", ass);
-
-/**
- * HIGGINS! FETCH MY PASSWORD GENERATOR
- */
-
-var options = {
-    leng: 0,
-    hasUpper: false,
-    hasLower: false,
-	hasSymbol: false,
-	hasNumber: false
-} 
-
-function optionsMapper() {
-	passwordOptions.forEach(function(item){
-		if(isCharSetOption(item) === true) {
-			options[item.passwordGeneratorField] = item.selected;
-		}
-		else {
-			options[item.passwordGeneratorField] = item.value;
-		}
-	});
-}
-
-optionsMapper();
-
-console.log(options);
-
-var password = PasswordGenerator(options);
-
-console.log(password); 
 
 
 function PasswordGenerator(options){
@@ -314,4 +299,4 @@ function writePassword() {
 
 }
 
-// writePassword(); 
+writePassword(); 

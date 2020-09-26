@@ -49,10 +49,11 @@ var passwordOptions = [
 	},
 ];
 
-// Error alerts bc users are dumb
+// Added isNumber error message
 var optionErrors = {
 	selectOne: "You must select at least one character set!",
-	validLength: "Number must be between 8 and 128!"
+	validLength: "Number must be between 8 and 128!",
+	isNumber: "Invalid character. Please enter a number."
 }
 
 
@@ -63,9 +64,13 @@ function assignment() {
 		// This is a passwordOption input
 		if (isCharSetOption(item) === true) {
 			var i = 0;
+
+			// good effort but probably not what you want to do
 			if(isValid.lengthInput < item.min || isValid.lengthInput > item.max) {
 				item.value = alert(item.prompt); 
 			}
+
+			
 			if(isValid.selectOne === false || i < passwordOptions.length) {
 				item.selected = confirm(item.prompt);
 			
@@ -79,18 +84,48 @@ function assignment() {
 		else {
 			// Ask until the user either complies or leaves the page to go somewhere else
 			while(isValid.validLength === false) {
+				var promptVal = prompt(item.prompt);
+
+				if(promptVal == null) {
+					break;
+				}
+
 				item.userInput = parseInt(prompt(item.prompt)); 
 
-				if (isNaN(+item.userInput)){
-					item.prompt = optionErrors.lengthInput;
+				//if user input is not a number, tell them to input a number.
+				if(isNaN(item.userInput)) {
+					
+					// left it here just for reasons
+					alert("Please enter a number.");
+					item.prompt = optionErrors.isNumber;
 				}
-				else if (item.validator(item.userInput, item.min, item.max)) {
-					item.value = item.userInput;
-					isValid.validLength = true;
+
+				// if user input IS a number, is that number within the min/max?
+				else if(item.userInput >= item.min && item.userInput <= item.max){
+					alert("Valid number.");
 				}
-				else {
-					item.prompt = optionErrors.validLength;
+
+				// If user input is too short, tell them
+				else if(item.userInput <= item.min - 1){
+					alert("Insufficient Length: Number is too small."); 
 				}
+
+				// If user input is too big, that's what she said
+				else if(item.userInput >= item.min + 1){
+					alert("Insufficent Length: Number is too large.")
+				}
+			
+
+				// if (isNaN(+item.userInput)){
+				// 	item.prompt = optionErrors.validLength;
+				// }
+				// else if (item.validator(item.userInput, item.min, item.max)) {
+				// 	item.value = item.userInput;
+				// 	isValid.validLength = true;
+				// }
+				// else {
+				// 	item.prompt = optionErrors.validLength;
+				// }
 			}
 		}
 	});
@@ -108,7 +143,7 @@ var isValid = {
 }
 
 
-var ass = assignment();
+var ass = assignment;
 
 generateBtn.addEventListener("click", ass);
 
@@ -216,12 +251,12 @@ function PasswordGenerator(options){
 
     for(var k = 0; k < offset; k++){ // finish this loop
 		// what to do with the offset (remainder of integer division)
-		var jeffSmells = decoder[getRndInteger(0, decoder.length - 1)],
-			jeffShowered = coder[jeffSmells],
-			randomCeption = getRndInteger(0, jeffShowered.length - 1),
-			rettel = jeffShowered[randomCeption];
+		var offKey = decoder[getRndInteger(0, decoder.length - 1)],
+			offKeySet = coder[offKey],
+			randomCeption = getRndInteger(0, offKeySet.length - 1),
+			randomized = offKeySet[randomCeption];
 
-		password.push(rettel); 
+		password.push(randomized); 
     }
 
     // randomize ???
@@ -279,4 +314,4 @@ function writePassword() {
 
 }
 
-writePassword();
+// writePassword(); 

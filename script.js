@@ -3,9 +3,12 @@
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
-// FIX THIS BITCH
+// Function to assign things
+function assignment() {
+
+// Does the user input for password length fall between the minimum and maximum allowed?
 function validLength(input, min, max) {
-	return input >= min || input <= max;
+	return input >= min && input <= max;
 }
 
 function isCharSetOption(item){
@@ -49,8 +52,7 @@ var passwordOptions = [
 	},
 ];
 
-// Class to get User Input
-function assignment() {
+
 
 	var isValid = {
 		validLength: false,
@@ -86,15 +88,11 @@ function assignment() {
 		while(isValid.validLength === false) {
 			var promptVal = prompt(item.prompt);
 
-			if(promptVal === null) {
-				break;
-			}
-
 			item.userInput = parseInt(promptVal); 
 
 			//if user input is not a number, tell them to input a number.
 			if (isNaN(+item.userInput)){
-				item.prompt = optionErrors.lengthInput;
+				item.prompt = optionErrors.isNumber;
 			}
 			else if (item.validator(item.userInput, item.min, item.max)) {
 				item.value = item.userInput;
@@ -108,7 +106,7 @@ function assignment() {
 
 	return {
 		// this sucks 🙃
-		assignLoop: function() {
+		userInputConfirm: function() {
 			for (var item of passwordOptions) {
 				if (isCharSetOption(item) === true) {
 					confirmChoice(item);
@@ -123,15 +121,9 @@ function assignment() {
 	
 
 	};
+
 }
 
-console.log(passwordOptions);
-
-
-
-	/**
-	 * HIGGINS! FETCH MY PASSWORD GENERATOR
-	 */
 	var myAss = new assignment();
 
 	// var ass = assignment().assignLoop();
@@ -203,14 +195,19 @@ function PasswordGenerator(options){
 	passwordCriteria((hasSymbol === true), 'symbols');
 	passwordCriteria((hasNumber === true), 'numbers');
 
-    // Remainder of integer division (i.e.; 10 / 3 = 3 R1)
-	var offset = leng % groups();
+    
+	
 	
 	// right shift ( >> ) truncates decimal to an integer
 	// var distOfGroups = (leng / groups()) >> 0;
 
 	// even number of characters to pull from each selected group based on length (not remainder or decimal)
 	var distOfGroups = parseInt((leng / groups()));
+	
+	// Remainder of integer division (i.e.; 10 / 3 = 3 R1)
+	var offset = leng % groups();
+
+	// create an empty array to push random values to
     var password = [];
 
 	
@@ -298,5 +295,3 @@ function writePassword() {
 	passwordText.value = password.password;
 
 }
-
-writePassword(); 

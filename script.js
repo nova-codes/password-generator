@@ -1,6 +1,3 @@
-// hello i wrote this and it works and idk why or what i'm doing please send help 
-// i am c r y i n g
-
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
@@ -67,10 +64,11 @@ function assignment() {
 		isNumber: "ERROR: Invalid character. Please enter a number."
 	}
 
-	
+	// Ask the user to confirm which character sets to include in password
 	function confirmChoice(item) {
 		var i = 0;
 
+		// Present the user with confirmation prompts for each character set
 		if (validFlags.selectOne === false || i < passwordOptions.length) {
 			item.selected = confirm(item.prompt);
 
@@ -82,20 +80,26 @@ function assignment() {
 		}
 	}
 
+	// Prompt the user to input a number for the password length.
 	function userLength(item) {
-		while (validFlags.validLength === false) {
-			var promptVal = prompt(item.prompt);
 
+		// Loop to validate user input
+		while (validFlags.validLength === false) {
+			// Prompt the user for a number
+			var promptVal = prompt(item.prompt);
+			// Prompt values are strings, so make it a number
 			item.userInput = parseInt(promptVal);
 
-			//if user input is not a number, tell them to input a number.
+			// If user input is not a number, tell them to input a number.
 			if (isNaN(+item.userInput)) {
 				item.prompt = optionErrors.isNumber;
 			}
+			// If user input is a valid number, is OK.
 			else if (item.validator(item.userInput, item.min, item.max)) {
 				item.value = item.userInput;
 				validFlags.validLength = true;
 			}
+			// If user input is a number but outside given min/max, tell them to do better
 			else {
 				item.prompt = optionErrors.validLength;
 			}
@@ -252,12 +256,12 @@ function assignment() {
 
 };
 
-// Write password to the #password input
-function assignmentDriver() {
-	var myAss = new assignment();
-	myAss.getPasswordOptions();
-
-	var result = myAss.generatePassword();
+// Write password to the #password output
+function writePassword() {
+	var assign = new assignment();
+	assign.getPasswordOptions();
+	
+	var result = assign.generatePassword();
 
 	var passwordText = document.querySelector("#password");
 
@@ -265,5 +269,5 @@ function assignmentDriver() {
 
 }
 
-
-generateBtn.addEventListener("click", assignmentDriver);
+// Add event listener to generate button
+generateBtn.addEventListener("click", writePassword);

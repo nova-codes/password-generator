@@ -1,5 +1,5 @@
 // Assignment Code
-var generateBtn = document.querySelector("#generate");
+var generateBtn = document.querySelector('#generate');
 
 // Function to assign things
 function assignment() {
@@ -17,36 +17,36 @@ function assignment() {
 	// What we need, the default value, and how to ask the user for the information
 	var passwordOptions = [
 		{
-			option: "length",
+			option: 'length',
 			value: 0,
 			min: 8,
 			max: 128,
 			validator: validLength,
-			prompt: "Please enter number between 8 - 128.",
+			prompt: 'Please enter number between 8 - 128.',
 			passwordGeneratorField: 'leng'
 		},
 		{
-			option: "uppercase",
+			option: 'uppercase',
 			selected: false,
-			prompt: "Do you want uppercase characters?",
+			prompt: 'Do you want uppercase characters?',
 			passwordGeneratorField: 'hasUpper'
 		},
 		{
-			option: "lowercase",
+			option: 'lowercase',
 			selected: false,
-			prompt: "Do you want lowercase characters?",
+			prompt: 'Do you want lowercase characters?',
 			passwordGeneratorField: 'hasLower'
 		},
 		{
-			option: "numbers",
+			option: 'numbers',
 			selected: false,
-			prompt: "Do you want numbers?",
+			prompt: 'Do you want numbers?',
 			passwordGeneratorField: 'hasNumber'
 		},
 		{
-			option: "symbols",
+			option: 'symbols',
 			selected: false,
-			prompt: "Do you want special characters?",
+			prompt: 'Do you want special characters?',
 			passwordGeneratorField: 'hasSymbol'
 		},
 	];
@@ -59,9 +59,9 @@ function assignment() {
 
 	// Object containing error alerts
 	var optionErrors = {
-		selectOne: "ERROR: You must select at least one character set!",
-		validLength: "ERROR: Number must be between 8 and 128!",
-		isNumber: "ERROR: Invalid character. Please enter a number."
+		selectOne: 'ERROR: You must select at least one character set!',
+		validLength: 'ERROR: Number must be between 8 and 128!',
+		isNumber: 'ERROR: Invalid character. Please enter a number.'
 	}
 
 	// Ask the user to confirm which character sets to include in password
@@ -80,7 +80,7 @@ function assignment() {
 		}
 	}
 
-	// Prompt the user to input a number for the password length.
+	// Prompt the user to input a number for the password length, then validate that input is correct
 	function userLength(item) {
 
 		// Loop to validate user input
@@ -131,6 +131,7 @@ function assignment() {
 		hasNumber: false
 	}
 
+	// Only use the options the user chose
 	function optionsMapper() {
 		passwordOptions.forEach(function (item) {
 			if (isCharSetOption(item) === true) {
@@ -142,6 +143,7 @@ function assignment() {
 		});
 	}
 
+	// let's take the user input generate this password already
 	function PasswordGenerator(options) {
 
 		// Assign values to the options
@@ -159,7 +161,7 @@ function assignment() {
 		var coder = {
 			uppercase: 'ABCDEFGHIJKLMNOPQRSTVUWXYZ'.split(''),
 			lowercase: 'abcdefghijklmnopqrstvuwxyz'.split(''),
-			symbols: '_!@#$%^&*~'.split(''),
+			symbols: '_!@#$%^&*~+'.split(''),
 			numbers: '1234567890'.split(''),
 		}
 
@@ -190,6 +192,7 @@ function assignment() {
 		// create an empty array to push random values to
 		var password = [];
 
+		// loop through the choices the user selected, select a random value from that choice, and push to the empty password array for later
 		for (var i = 0; i < distOfGroups; i++) { 
 
 			for (var j = 0; j < groups(); j++) { 
@@ -203,7 +206,7 @@ function assignment() {
 			}
 		}
 
-		// what to do with the offset (remainder of integer division)
+		// If the number of groups (user selected options) and the length is not a whole number, select a group at random, and a random value from that group and push it to the password array
 		for (var k = 0; k < offset; k++) {
 
 			var offKey = decoder[getRndInteger(0, decoder.length - 1)],
@@ -214,7 +217,7 @@ function assignment() {
 			password.push(randomized);
 		}
 
-
+		// Take the values in the password array and shuffle them around, then join the values into a string without commas
 		function randomizePassword(password) {
 			var currentIndex = 0,
 				tempValue,
@@ -249,11 +252,7 @@ function assignment() {
 				password: pg.password
 			}
 		}
-
-
 	}
-
-
 };
 
 // Write password to the #password output
@@ -263,11 +262,11 @@ function writePassword() {
 	
 	var result = assign.generatePassword();
 
-	var passwordText = document.querySelector("#password");
+	var passwordText = document.querySelector('#password');
 
 	passwordText.value = result.password;
 
 }
 
 // Add event listener to generate button
-generateBtn.addEventListener("click", writePassword);
+generateBtn.addEventListener('click', writePassword);
